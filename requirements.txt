@@ -1,0 +1,15 @@
+# Core dependencies
+pulp>=2.7.0
+numpy>=1.21.0
+pandas>=1.3.0
+matplotlib>=3.4.0
+seaborn>=0.11.0
+
+# Development dependencies
+pytest>=6.2.0
+black>=21.5b2
+flake8>=3.9.0
+
+# For documentation (if needed in the future)
+# sphinx>=4.0.0
+# sphinx-rtd-theme>=0.5.0
