@@ -1,11 +1,3 @@
-# Transportation Problem - Python Implementation Template
-# MATH F212 Optimization Assignment
-# Use this as foundation for your complete solution
-
-"""
-Comprehensive Transportation Problem Solver using PuLP
-Includes: Balance checking, IBFS calculation, MODI method, and result interpretation
-"""
 
 import numpy as np
 import pandas as pd
@@ -13,28 +5,21 @@ from pulp import *
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# ============================================================================
-# PROBLEM 1: BALANCED TRANSPORTATION PROBLEM (Sugar Factories Example)
-# ============================================================================
-
 def problem_1_balanced_tp():
-    """
-    Three factories (A, B, C) supply three markets (X, Y, Z)
-    Minimize transportation cost
-    """
+    
     
     print("\n" + "="*70)
     print("PROBLEM 1: BALANCED TRANSPORTATION PROBLEM")
     print("="*70)
     
-    # Problem data
+    
     sources = ['Factory_A', 'Factory_B', 'Factory_C']
     destinations = ['Market_X', 'Market_Y', 'Market_Z']
     
     supply = {'Factory_A': 10, 'Factory_B': 15, 'Factory_C': 12}
     demand = {'Market_X': 12, 'Market_Y': 10, 'Market_Z': 15}
     
-    # Transportation costs (cost per unit)
+    
     costs = {
         ('Factory_A', 'Market_X'): 4,
         ('Factory_A', 'Market_Y'): 3,
@@ -47,7 +32,7 @@ def problem_1_balanced_tp():
         ('Factory_C', 'Market_Z'): 4,
     }
     
-    # STEP 1: Balance Check
+    
     total_supply = sum(supply.values())
     total_demand = sum(demand.values())
     print(f"\nStep 1: BALANCE CHECK")
@@ -55,39 +40,39 @@ def problem_1_balanced_tp():
     print(f"  Total Demand: {total_demand}")
     print(f"  Status: {'BALANCED ✓' if total_supply == total_demand else 'UNBALANCED ✗'}")
     
-    # STEP 2: Create LP Problem
+    
     print(f"\nStep 2: FORMULATE LINEAR PROGRAM")
     prob = LpProblem("Transportation_Problem_1", LpMinimize)
     
-    # Decision variables
+    
     routes = [(i, j) for i in sources for j in destinations]
     vars_dict = LpVariable.dicts("Route", routes, lowBound=0, cat='Continuous')
     
-    # Objective function: Minimize total transportation cost
+    
     prob += lpSum([vars_dict[(i, j)] * costs[(i, j)] for (i, j) in routes]), "Total_Cost"
     print(f"  Created {len(routes)} decision variables")
     print(f"  Objective: Minimize Z = Σ cᵢⱼ × xᵢⱼ")
     
-    # Supply constraints
+    
     print(f"\nStep 3: ADD CONSTRAINTS")
     for i in sources:
         prob += lpSum([vars_dict[(i, j)] for j in destinations]) == supply[i], f"Supply_{i}"
     print(f"  Added {len(sources)} supply constraints")
     
-    # Demand constraints
+    
     for j in destinations:
         prob += lpSum([vars_dict[(i, j)] for i in sources]) == demand[j], f"Demand_{j}"
     print(f"  Added {len(destinations)} demand constraints")
     print(f"  Total constraints: {len(prob.constraints)}")
     
-    # STEP 4: Solve
+    
     print(f"\nStep 4: SOLVE OPTIMIZATION PROBLEM")
     prob.solve(PULP_CBC_CMD(msg=0))
     
     print(f"  Status: {LpStatus[prob.status]}")
     print(f"  Minimum Total Cost: Rs. {value(prob.objective):.2f}")
     
-    # STEP 5: Extract and display results
+    
     print(f"\nStep 5: OPTIMAL ALLOCATION SOLUTION")
     print(f"\n{'From':<15} {'To':<15} {'Units':<10} {'Cost/Unit':<10} {'Total Cost':<10}")
     print("-" * 60)
@@ -97,7 +82,7 @@ def problem_1_balanced_tp():
     
     for i in sources:
         for j in destinations:
-            if vars_dict[(i, j)].varValue > 0.001:  # Only show non-zero allocations
+            if vars_dict[(i, j)].varValue > 0.001:  
                 units = vars_dict[(i, j)].varValue
                 unit_cost = costs[(i, j)]
                 route_cost = units * unit_cost
@@ -114,7 +99,7 @@ def problem_1_balanced_tp():
     print("-" * 60)
     print(f"{'TOTAL':<15} {'TRANSPORTATION COST':<15} {'':>9} {'':>9} {value(prob.objective):>9.2f}")
     
-    # STEP 6: Verification
+    
     print(f"\nStep 6: CONSTRAINT VERIFICATION")
     print(f"\nSupply Verification:")
     for i in sources:
@@ -126,7 +111,7 @@ def problem_1_balanced_tp():
         received = sum([vars_dict[(i, j)].varValue for i in sources])
         print(f"  {j}: Received {received:.2f} (Required: {demand[j]}) {'✓' if abs(received - demand[j]) < 0.01 else '✗'}")
     
-    # Return results for interpretation
+    
     return {
         'problem': 'Problem_1_Balanced',
         'allocation': allocation_data,
@@ -140,9 +125,9 @@ def problem_1_balanced_tp():
     }
 
 
-# ============================================================================
-# PROBLEM 2: UNBALANCED TP - SUPPLY EXCEEDS DEMAND (Dummy Destination)
-# ============================================================================
+
+
+
 
 def problem_2_unbalanced_supply_excess():
     """
@@ -160,14 +145,14 @@ def problem_2_unbalanced_supply_excess():
     supply = {'Plant_1': 1000, 'Plant_2': 1500, 'Plant_3': 1200}
     demand = {'DC_1': 2300, 'DC_2': 1400, 'DC_3': 1000}
     
-    # Costs
+    
     costs = {
         ('Plant_1', 'DC_1'): 80, ('Plant_1', 'DC_2'): 215, ('Plant_1', 'DC_3'): 100,
         ('Plant_2', 'DC_1'): 100, ('Plant_2', 'DC_2'): 108, ('Plant_2', 'DC_3'): 150,
         ('Plant_3', 'DC_1'): 102, ('Plant_3', 'DC_2'): 68, ('Plant_3', 'DC_3'): 120,
     }
     
-    # Balance check
+    
     total_supply = sum(supply.values())
     total_demand = sum(demand.values())
     print(f"\nStep 1: BALANCE CHECK")
@@ -175,7 +160,7 @@ def problem_2_unbalanced_supply_excess():
     print(f"  Total Demand: {total_demand}")
     print(f"  Difference: {total_supply - total_demand}")
     
-    # Handle unbalanced
+    
     if total_supply > total_demand:
         excess = total_supply - total_demand
         print(f"  Status: UNBALANCED - Supply Exceeds Demand by {excess} units")
@@ -184,11 +169,11 @@ def problem_2_unbalanced_supply_excess():
         destinations.append('Dummy_Warehouse')
         demand['Dummy_Warehouse'] = excess
         
-        # Add zero costs to dummy destination
+        
         for i in sources:
             costs[(i, 'Dummy_Warehouse')] = 0
     
-    # Solve using same LP approach
+    
     print(f"\nStep 2: FORMULATE BALANCED LP")
     prob = LpProblem("Transportation_Problem_2_Unbalanced", LpMinimize)
     
@@ -205,13 +190,13 @@ def problem_2_unbalanced_supply_excess():
     
     print(f"  Variables: {len(routes)}, Constraints: {len(prob.constraints)}")
     
-    # Solve
+    
     print(f"\nStep 3: SOLVE")
     prob.solve(PULP_CBC_CMD(msg=0))
     print(f"  Status: {LpStatus[prob.status]}")
     print(f"  Minimum Total Cost: Rs. {value(prob.objective):.2f}")
     
-    # Results
+    
     print(f"\nStep 4: OPTIMAL ALLOCATION")
     print(f"\n{'From':<15} {'To':<20} {'Units':<12} {'Cost/Unit':<12} {'Total Cost':<12}")
     print("-" * 70)
@@ -234,7 +219,7 @@ def problem_2_unbalanced_supply_excess():
     print("-" * 70)
     print(f"TOTAL TRANSPORTATION COST: Rs. {value(prob.objective):.2f}")
     
-    # Interpretation
+    
     print(f"\nStep 5: INTERPRETATION")
     dummy_allocation = 0
     for i in sources:
@@ -253,9 +238,9 @@ def problem_2_unbalanced_supply_excess():
     }
 
 
-# ============================================================================
-# PROBLEM 3: UNBALANCED TP - DEMAND EXCEEDS SUPPLY (Dummy Source + Penalties)
-# ============================================================================
+
+
+
 
 def problem_3_unbalanced_demand_excess():
     """
@@ -269,11 +254,11 @@ def problem_3_unbalanced_demand_excess():
     sources = ['Plant_1', 'Plant_2', 'Plant_3']
     destinations = ['City_1', 'City_2', 'City_3']
     
-    # Normal scenario
+    
     supply = {'Plant_1': 25, 'Plant_2': 40, 'Plant_3': 30}
     demand = {'City_1': 30, 'City_2': 35, 'City_3': 25}
     
-    # With 20% increase
+    
     print("\nStep 1: SCENARIO ANALYSIS")
     print(f"  Normal Demand: City_1=30, City_2=35, City_3=25, Total=90")
     print(f"  With 20% Increase: City_1=36, City_2=42, City_3=30, Total=108")
@@ -290,11 +275,11 @@ def problem_3_unbalanced_demand_excess():
     print(f"  Status: UNBALANCED - Demand Exceeds Supply by {shortage} units")
     print(f"  Action: Add Dummy Source with {shortage} units from External Network")
     
-    # Add dummy source
+    
     sources.append('External_Network')
     supply['External_Network'] = shortage
     
-    # Costs
+    
     costs = {
         ('Plant_1', 'City_1'): 600, ('Plant_1', 'City_2'): 700, ('Plant_1', 'City_3'): 400,
         ('Plant_2', 'City_1'): 320, ('Plant_2', 'City_2'): 300, ('Plant_2', 'City_3'): 350,
@@ -320,13 +305,13 @@ def problem_3_unbalanced_demand_excess():
     
     print(f"  Variables: {len(routes)}, Constraints: {len(prob.constraints)}")
     
-    # Solve
+    
     print(f"\nStep 3: SOLVE")
     prob.solve(PULP_CBC_CMD(msg=0))
     print(f"  Status: {LpStatus[prob.status]}")
     print(f"  Total Cost (Transportation + Premium): Rs. {value(prob.objective):.2f}")
     
-    # Results
+    
     print(f"\nStep 4: OPTIMAL ALLOCATION WITH DEMAND INCREASE")
     print(f"\n{'From':<20} {'To':<12} {'Units':<10} {'Cost/Unit':<12} {'Total Cost':<12}")
     print("-" * 70)
@@ -356,7 +341,7 @@ def problem_3_unbalanced_demand_excess():
     print("-" * 70)
     print(f"TOTAL COST: Rs. {value(prob.objective):.2f}")
     
-    # Interpretation
+    
     print(f"\nStep 5: COST BREAKDOWN & INTERPRETATION")
     transport_cost = value(prob.objective) - premium_cost
     print(f"  Regular Transportation Cost: Rs. {transport_cost:.2f}")
@@ -382,9 +367,9 @@ def problem_3_unbalanced_demand_excess():
     }
 
 
-# ============================================================================
-# VISUALIZATION & RESULTS EXPORT
-# ============================================================================
+
+
+
 
 def create_allocation_visualization(results, problem_name):
     """Create heatmap visualization of allocation"""
@@ -393,7 +378,7 @@ def create_allocation_visualization(results, problem_name):
     
     allocation_df = pd.DataFrame(results['allocation'])
     
-    # Create pivot table
+    
     pivot = allocation_df.pivot_table(
         values='Units', 
         index='From', 
@@ -402,7 +387,7 @@ def create_allocation_visualization(results, problem_name):
         fill_value=0
     )
     
-    # Create heatmap
+    
     plt.figure(figsize=(10, 6))
     sns.heatmap(pivot, annot=True, fmt='.1f', cmap='YlOrRd', cbar_kws={'label': 'Units'})
     plt.title(f'{problem_name}\nOptimal Allocation Heatmap')
@@ -416,9 +401,9 @@ def create_allocation_visualization(results, problem_name):
     plt.close()
 
 
-# ============================================================================
-# MAIN EXECUTION
-# ============================================================================
+
+
+
 
 if __name__ == "__main__":
     
@@ -429,12 +414,12 @@ if __name__ == "__main__":
     print("█" + " "*68 + "█")
     print("█"*70)
     
-    # Solve all problems
+    
     results_1 = problem_1_balanced_tp()
     results_2 = problem_2_unbalanced_supply_excess()
     results_3 = problem_3_unbalanced_demand_excess()
     
-    # Create visualizations
+    
     print("\n" + "="*70)
     print("CREATING VISUALIZATIONS")
     print("="*70)
@@ -443,7 +428,7 @@ if __name__ == "__main__":
     create_allocation_visualization(results_2, "Problem_2_Supply_Excess")
     create_allocation_visualization(results_3, "Problem_3_Demand_Excess")
     
-    # Summary
+    
     print("\n" + "="*70)
     print("SOLUTION SUMMARY")
     print("="*70)
