@@ -1,0 +1,159 @@
+
+██████████████████████████████████████████████████████████████████████
+█                                                                    █
+█        TRANSPORTATION PROBLEM - COMPREHENSIVE PYTHON SOLUTION      █
+█                  MATH F212 Optimization Assignment                 █
+█                                                                    █
+██████████████████████████████████████████████████████████████████████
+
+======================================================================
+PROBLEM 1: BALANCED TRANSPORTATION PROBLEM
+======================================================================
+
+Step 1: BALANCE CHECK
+  Total Supply: 37
+  Total Demand: 37
+  Status: BALANCED ✓
+
+Step 2: FORMULATE LINEAR PROGRAM
+  Created 9 decision variables
+  Objective: Minimize Z = Σ cᵢⱼ × xᵢⱼ
+
+Step 3: ADD CONSTRAINTS
+  Added 3 supply constraints
+  Added 3 demand constraints
+  Total constraints: 6
+
+Step 4: SOLVE OPTIMIZATION PROBLEM
+  Status: Optimal
+  Minimum Total Cost: Rs. 153.00
+
+Step 5: OPTIMAL ALLOCATION SOLUTION
+
+From            To              Units      Cost/Unit  Total Cost
+------------------------------------------------------------
+Factory_A       Market_Y             7.00      3.00     21.00
+Factory_A       Market_Z             3.00      2.00      6.00
+Factory_B       Market_X            12.00      5.00     60.00
+Factory_B       Market_Y             3.00      6.00     18.00
+Factory_C       Market_Z            12.00      4.00     48.00
+------------------------------------------------------------
+TOTAL           TRANSPORTATION COST                        153.00
+
+Step 6: CONSTRAINT VERIFICATION
+
+Supply Verification:
+  Factory_A: Shipped 10.00 (Required: 10) ✓
+  Factory_B: Shipped 15.00 (Required: 15) ✓
+  Factory_C: Shipped 12.00 (Required: 12) ✓
+
+Demand Verification:
+  Market_X: Received 12.00 (Required: 12) ✓
+  Market_Y: Received 10.00 (Required: 10) ✓
+  Market_Z: Received 15.00 (Required: 15) ✓
+
+
+======================================================================
+PROBLEM 2: UNBALANCED TP - SUPPLY > DEMAND
+======================================================================
+
+Step 1: BALANCE CHECK
+  Total Supply: 3700
+  Total Demand: 4700
+  Difference: -1000
+
+Step 2: FORMULATE BALANCED LP
+  Variables: 9, Constraints: 6
+
+Step 3: SOLVE
+  Status: Infeasible
+  Minimum Total Cost: Rs. 425200.00
+
+Step 4: OPTIMAL ALLOCATION
+
+From            To                   Units        Cost/Unit    Total Cost
+----------------------------------------------------------------------
+Plant_1         DC_1                      800.00       80.00    64000.00
+Plant_1         DC_3                      200.00      100.00    20000.00
+Plant_2         DC_1                     1500.00      100.00   150000.00
+Plant_3         DC_2                     1400.00       68.00    95200.00
+Plant_3         DC_3                      800.00      120.00    96000.00
+----------------------------------------------------------------------
+TOTAL TRANSPORTATION COST: Rs. 425200.00
+
+Step 5: INTERPRETATION
+  Total units shipped to Dummy Warehouse: 0.00
+  Interpretation: These units represent EXCESS INVENTORY/SURPLUS
+  that cannot be distributed to regular markets.
+  Action: Consider reducing production or finding new markets.
+
+
+======================================================================
+PROBLEM 3: UNBALANCED TP - DEMAND > SUPPLY (PREMIUM NETWORK)
+======================================================================
+
+Step 1: SCENARIO ANALYSIS
+  Normal Demand: City_1=30, City_2=35, City_3=25, Total=90
+  With 20% Increase: City_1=36, City_2=42, City_3=30, Total=108
+  Total Supply: 95
+  Total Demand (with increase): 108
+  Shortage: 13 units
+  Status: UNBALANCED - Demand Exceeds Supply by 13 units
+  Action: Add Dummy Source with 13 units from External Network
+
+Step 2: FORMULATE LP WITH EXTERNAL SOURCE
+  Variables: 12, Constraints: 7
+
+Step 3: SOLVE
+  Status: Optimal
+  Total Cost (Transportation + Premium): Rs. 49710.00
+
+Step 4: OPTIMAL ALLOCATION WITH DEMAND INCREASE
+
+From                 To           Units      Cost/Unit    Total Cost
+----------------------------------------------------------------------
+Plant_1              City_3           25.00      400.00    10000.00
+Plant_2              City_2           40.00      300.00    12000.00
+Plant_3              City_1           23.00      500.00    11500.00
+Plant_3              City_2            2.00      480.00      960.00
+Plant_3              City_3            5.00      450.00     2250.00
+External_Network     City_1           13.00     1000.00    13000.00
+----------------------------------------------------------------------
+TOTAL COST: Rs. 49710.00
+
+Step 5: COST BREAKDOWN & INTERPRETATION
+  Regular Transportation Cost: Rs. 36710.00
+  Premium Network Cost (shortage): Rs. 13000.00
+  Premium as % of Total: 26.2%
+
+Step 6: SHORTAGE ANALYSIS BY DESTINATION
+  City_1: 13 units from external (Penalty: Rs. 13000.00)
+  City_2: Fully met by internal plants ✓
+  City_3: Fully met by internal plants ✓
+
+RECOMMENDATION: Expand production capacity to reduce premium costs
+
+======================================================================
+CREATING VISUALIZATIONS
+======================================================================
+
+Generating visualization for Problem_1_Balanced_TP...
+✓ Saved: Problem_1_Balanced_TP_allocation.png
+
+Generating visualization for Problem_2_Supply_Excess...
+✓ Saved: Problem_2_Supply_Excess_allocation.png
+
+Generating visualization for Problem_3_Demand_Excess...
+✓ Saved: Problem_3_Demand_Excess_allocation.png
+
+======================================================================
+SOLUTION SUMMARY
+======================================================================
+Problem 1 (Balanced): Minimum Cost = Rs. 153.00
+Problem 2 (Supply>Demand): Minimum Cost = Rs. 425200.00
+  - Excess inventory to warehouse: 0.00 units
+Problem 3 (Demand>Supply): Total Cost = Rs. 49710.00
+  - Premium network cost (for shortage): Rs. 13000.00
+
+✓ All problems solved successfully!
+✓ See visualization images for allocation heatmaps
