@@ -1,14 +1,13 @@
-# Optimization Project
+# Optimization Project - Transportation & Assignment Problems
 
-This repository contains solutions and documentation for optimization problems, including Transportation and Assignment problems, as part of the MATH F212 Optimization I course (Semester 2025-26).
+A Python-based implementation of optimization algorithms for solving Transportation and Assignment problems. This project includes solutions for balanced and unbalanced transportation problems, along with visual representations of the solutions.
 
-## Contents
-
-- Transportation Problem (TP) solutions in Python
-- LaTeX documents with problem statements and solutions
-- Visual representations of problem solutions
-- Quick reference checklist for problem-solving
-- Assignment plans and documentation
+## Key Features
+- Solves balanced and unbalanced transportation problems
+- Implements the North-West Corner, Least Cost, and Vogel's Approximation methods
+- Generates visual representations of solutions
+- Includes test cases and sample problems
+- Quick reference guide for problem-solving approaches
 
 ## Getting Started
 

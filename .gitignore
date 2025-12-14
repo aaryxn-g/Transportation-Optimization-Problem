@@ -20,7 +20,8 @@ wheels/
 .installed.cfg
 *.egg
 
-# LaTeX
+# LaTeX files and outputs
+*.tex
 *.aux
 *.bbl
 *.blg
@@ -40,3 +41,6 @@ wheels/
 *~
 .DS_Store
 Thumbs.db
+
+# Project specific
+final.txt
